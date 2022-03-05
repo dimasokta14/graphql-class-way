@@ -1,0 +1,11 @@
+.git
+.DS_Store
+node_modules/
+build/
+*.env
+*.key*
+static/uploads/images/*
+!static/uploads/images/init
+static/uploads/files/*
+!static/uploads/files/init
+*.log
