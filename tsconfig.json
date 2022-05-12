@@ -8,7 +8,7 @@
 		"noUnusedParameters": false,
 		"experimentalDecorators": true,
 		"esModuleInterop": true,
-		"baseUrl": "."
+		"rootDir": "."
 	},
 	"filesGlob": ["interfaces/**/*.d.ts", "typings/**/*.d.ts"],
 	"exclude": ["node_modules"]

@@ -1,1 +1,2 @@
-export * from "./GetItemByIdQuery";
+export * from "./BookQuery";
+export * as ItemQueries from "./ItemQuery";

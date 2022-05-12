@@ -1,43 +1,32 @@
-import { GraphQLObjectType, GraphQLSchema } from "graphql";
+import { GraphQLID, GraphQLObjectType, GraphQLSchema } from "graphql";
+import { GraphQLErrorHandling } from "../handler";
+import { ItemModel } from "../models";
+import { ItemQueries } from "./queries";
+import { ItemType, BookType } from "./types";
 
-// import { GraphQLErrorHandling } from "../core";
-import { GetItemByIdQuery } from "./queries";
-// import {
-//     CreateAuthorMutation,
-//     DeleteAuthorMutation,
-//     UpdateAuthorMutation
-// } from './mutations';
+var books = [
+	{ name: "Name of the Wind", genre: "Fantasy", id: "1" },
+	{ name: "The Final Empire", genre: "Fantasy", id: "2" },
+	{ name: "The Long Earth", genre: "Sci-Fi", id: "3" },
+];
 
-export class Schema {
-	private static instance: Schema;
-
-	private rootQuery: GraphQLObjectType = new GraphQLObjectType({
-		name: "Query",
-		fields: {
-			getItem: new GetItemByIdQuery(),
+const RootQuery = new GraphQLObjectType({
+	name: "RootQuery",
+	description: "Root query for all schema types query",
+	fields: {
+		book: {
+			type: BookType,
+			args: { id: { type: GraphQLID } },
+			resolve: (source, args) => {
+				return books.find((book) => book.id === args?.id);
+			},
 		},
-	});
+		items: ItemQueries.getAllItemQuery,
+		item: ItemQueries.getItemById,
+		item_without_loader: ItemQueries.getItemByIdWithoutLoader,
+	},
+});
 
-	// private rootMutation: GraphQLObjectType = new GraphQLObjectType({
-	// 	name: "Mutation",
-	// 	fields: {
-	// 		createAuthor: new CreateAuthorMutation(),
-	// 		updateAuthor: new UpdateAuthorMutation(),
-	// 		deleteAuthor: new DeleteAuthorMutation(),
-	// 	},
-	// });
-
-	private schema: GraphQLSchema = new GraphQLSchema({
-		query: this.rootQuery,
-		// mutation: this.rootMutation,
-	});
-
-	static get(): GraphQLSchema {
-		if (!Schema.instance) {
-			Schema.instance = new Schema();
-			// GraphQLErrorHandling.watch(Schema.instance.schema);
-			console.error(Schema.instance.schema);
-		}
-		return Schema.instance.schema;
-	}
-}
+export const RootSchema = new GraphQLSchema({
+	query: RootQuery,
+});

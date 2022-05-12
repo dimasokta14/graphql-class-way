@@ -1,1 +1,1 @@
-export * from "./ItemModel";
+export * as ItemModel from "./ItemModel";

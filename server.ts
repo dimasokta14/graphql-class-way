@@ -1,23 +1,32 @@
 import express from "express";
-import { buildSchema } from "graphql";
-import helmet from "helmet";
-import cors from "cors";
+import { graphqlHTTP } from "express-graphql";
+// import cors from "cors";
 import dotEnv from "./config";
-import { DefaultRoutes, GraphQLRoutes } from "./src/routes";
+import { RootSchema } from "./src/schemas";
+import { RootValue } from "./src/utils/RootValue";
 
 dotEnv();
-const app = express();
 
-app.use(helmet());
-app.use(helmet.noSniff());
+const app = express();
+app.use(express.json());
+
+// app.use("/graphql", (req: express.Request, res: express.Response) => {
+// 	graphqlHTTP({
+// 		schema: RootSchema,
+// 		rootValue: new RootValue(),
+// 	})(req, res);
+// });
+
 app.use(
-	helmet.hsts({
-		maxAge: 31536000,
-		includeSubDomains: true,
+	"/graphql",
+	graphqlHTTP({
+		schema: RootSchema,
+		graphiql: true,
 	})
 );
-app.use(cors());
-DefaultRoutes.map(app);
-GraphQLRoutes.map(app);
-app.listen(4000);
-console.log("Running a GraphQL API server at http://localhost:4000/graphql");
+
+app.listen(process.env.GRAPHQL_PORT, () => {
+	console.log(
+		`Server is running at http://localhost:${process.env.GRAPHQL_PORT} ${process.env.GRAPHQL_PATH}`
+	);
+});

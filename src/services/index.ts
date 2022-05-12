@@ -1,1 +1,1 @@
-export * from "./ItemServices";
+export * as ItemService from "./ItemServices";

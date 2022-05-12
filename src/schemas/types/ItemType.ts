@@ -1,10 +1,42 @@
-import { GraphQLObjectType } from "graphql";
-import { IdField } from "../fields";
+import { GraphQLObjectType, GraphQLString } from "graphql";
+import { TimestampType } from "./TimestampType";
+import { VendorType } from "./VendorType";
 
-export const ItemType = new GraphQLObjectType({
-	name: "Item",
-	description: "A single data item",
+const ItemDataType = new GraphQLObjectType({
+	name: "ItemData",
+	description: "Item Data",
 	fields: () => ({
-		id: new IdField(),
+		rfid: {
+			type: GraphQLString,
+		},
+		qrcode: {
+			type: GraphQLString,
+		},
+		barcode: {
+			type: GraphQLString,
+		},
+		serial_number: {
+			type: GraphQLString,
+		},
 	}),
 });
+
+const ItemType = new GraphQLObjectType({
+	name: "Item",
+	description: "All Item on The Database",
+	fields: () => ({
+		id: {
+			type: GraphQLString,
+		},
+		data: {
+			type: ItemDataType,
+		},
+		vendor: {
+			type: VendorType,
+		},
+		created_at: { type: TimestampType },
+		updated_at: { type: TimestampType },
+	}),
+});
+
+export { ItemType };
